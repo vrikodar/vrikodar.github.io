@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vrikodar</title>
+    <style>
+        body {
+            background-color: #222;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+        }
+
+        .nav {
+            width: 50px;
+            background-color: #333;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .nav a {
+            display: block;
+            color: #00ff00;
+            text-decoration: none;
+            margin-bottom: 10px;
+            padding: 10px;
+            margin-right: 2px;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .date-time {
+            color: #00ff00;
+            font-size: 20px;
+            margin-right: 20px;
+            margin-top: 20px;
+            flex: 1;
+            text-align: right;
+        }
+
+        .title-box {
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .gray-text {
+            color: #7f8c8d; 
+        }
+
+        .terminal-box {
+            background-color: black;
+            color: #7f8c8d; 
+            padding: 20px;
+            white-space: pre-line;
+            font-family: 'Hack', monospace;
+            font-size: 18px;
+            overflow-y: auto;
+            border-radius: 2.5%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav">
+            <a href="about.html">About</a>
+            <a href="index.html">Home</a>
+            <a href="explore.html">Explore</a>
+            <a href="projects.html">Projects</a>
+        </div>
+        <div class="content">
+            <div class="title-box">
+                <h1 class="gray-text">Vrikodar | Offensive Security and Red Teaming</h1>
+            </div>
+            <div class="terminal-box" id="terminal">
+                <span class="gray-text" id="typed-text"></span>
+            </div>
+        </div>
+        <div class="date-time" id="date-time"></div>
+    </div>
+
+    <script>
+        function updateTime() {
+            const now = new Date();
+            const dateElement = document.getElementById("date-time");
+            const options = {
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            };
+            dateElement.textContent = now.toLocaleString('en-US', options);
+        }
+
+        function typeText(text, elementId) {
+            const textElement = document.getElementById(elementId);
+            let index = 0;
+
+            function type() {
+                if (index < text.length) {
+                    textElement.textContent += text.charAt(index);
+                    index++;
+                    setTimeout(type, 10); 
+                }
+            }
+
+            type();
+        }
+
+        updateTime();
+        setInterval(updateTime, 1000); 
+
+        // Trigger typing animation when the page loads
+        typeText("Vrikodar | Offensive Security and Red Teaming\n Github: https://github.com/vrikodar\n\nPublication of Offensive Security Research and tools.\nExplore new writeups under Explore.\nOffensive Security tools under Projects.\n\nThe author holds no responsibility for missue of \nany information or tools provided.\n\nशौर्यं तेजो धृतिर्दाक्ष्यं युद्धे चाप्यपलायनम् |\nदानमीश्वरभावश्च क्षात्रं कर्म स्वभावजम् || 43||", "typed-text");
+    </script>
+</body>
+</html>
