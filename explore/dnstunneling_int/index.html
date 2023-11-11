@@ -123,20 +123,20 @@
         <div class="content">
             <div class="about-title">|| Bypass Network Restrictions with DNS Tunneling ||</div>
             <br>
-            <p><b>Before we jump into configuring DNS tunnels, What is DNS tunneling? When and Why do we need it?</b></p>
+            <p>Before we jump into configuring DNS tunnels, What is DNS tunneling? When and Why do we need it?</p>
             <div class="p-detail">
-            <p><b>In most of the modern networks it is very less likely that DNS traffic is ever going to to be blocked by the firewalls.<br> DNS traffic could be filtered to only specific domains or only high reputed domains in few cases. <br>Most of the times DNS requests to all the domains are allowed by firewalls</b></p>
-            <p><b>There could be multiple possible cases where DNS tunneling proves to be useful.<br>A very common example is a Command and Control Server using DNS tunnel as a communication channel.<p>
-            <p><b>In DNS tunneling the normal network traffic or packets are encapsulated as DNS traffic.<br>These packets are then exfiltrated using DNS queries. This could be done in a number of ways using DNS.<br>In this article We will not dive deep into how that works.<p></div>
-            <p><b>Example: How would a typical DNS tunnel work as a C2 channel?</b></p>
+            <p>In most of the modern networks it is very less likely that DNS traffic is ever going to to be blocked by the firewalls.<br> DNS traffic could be filtered to only specific domains or only high reputed domains in few cases. <br>Most of the times DNS requests to all the domains are allowed by firewalls</p>
+            <p>There could be multiple possible cases where DNS tunneling proves to be useful.<br>A very common example is a Command and Control Server using DNS tunnel as a communication channel.<p>
+            <p>In DNS tunneling the normal network traffic or packets are encapsulated as DNS traffic.<br>These packets are then exfiltrated using DNS queries. This could be done in a number of ways using DNS.<br>In this article We will not dive deep into how that works.<p></div>
+            <p>Example: How would a typical DNS tunnel work as a C2 channel?</p>
             <img src="https://raw.githubusercontent.com/vrikodar/vrikodar.github.io/main/explore/dnstunneling_int/images/dns_int.png">
             <div class="p-detail">
-            <p><b>There are multiple open source tools that can be used to do DNS tunneling.<br> Most of these tools focus on creating DNS tunnels to access internet via DNS,<br>which can prove to be useful in bypassing captive portals<p>
-            <p><b>We are going to focus on using DNS tunnels to access internet. This can be useful to bypass captive portals.<br>which very often require users to authenticate to access internet.<br>Most captive portals will by default allow users to make DNS requests without being authenticated to the portal.<br>we are going to use a very well known tool <a href="https://code.kryo.se/iodine/">iodine</a> for creating DNS tunnels.<p>
+            <p>There are multiple open source tools that can be used to do DNS tunneling.<br> Most of these tools focus on creating DNS tunnels to access internet via DNS,<br>which can prove to be useful in bypassing captive portals<p>
+            <p>We are going to focus on using DNS tunnels to access internet. This can be useful to bypass captive portals.<br>which very often require users to authenticate to access internet.<br>Most captive portals will by default allow users to make DNS requests without being authenticated to the portal.<br>we are going to use a very well known tool <a href="https://code.kryo.se/iodine/">iodine</a> for creating DNS tunnels.<p>
             <p>Iodine comes with both client and server.<br>The server can be invoked using the command iodined and the client with the command iodine</p></div>
             <p>Before we proceed further you need to have a machine with public IP on the internet (For Iodine Server).</p><div class="p-detail"><p>You might host a VM on Azure or AWS<br>Make sure that there are no firewall rules blocking incoming traffic to the machine.<br>Iodine should be installed on the machine and SSH should be running.</p>
             </div>
-            <p><b>Steps to Create a DNS tunnel using Iodine</b></p>
+            <p>Steps to Create a DNS tunnel using Iodine</p>
             <div class="p-detail">
             <p>Step-1: Buy a Domain from service of your choice (NameCheap, GoDaddy etc..)</p>
             <p>Lets assume we bought a domain veer.org<br>Access the Domain configuration panel</p>
@@ -250,7 +250,7 @@
             <div class="p-detail">
                 <p>Now you should be able to access internet via Encrypted SSH tunnel running inside the DNS tunnel.</p>
             </div>
-            <p><b>How to Detect DNS Tunneling?</b></p>
+            <p>How to Detect DNS Tunneling?</p>
             <div class="p-detail">
                 <p>Attackers can choose to use custom written tools to do DNS tunneling<br>The tools might behave differently making it more difficult to detect.<br>The most common tools such as DNSCat and Iodine can be detected by looking for certain type of patterns in DNS traffic.</p>
                 <ul>
