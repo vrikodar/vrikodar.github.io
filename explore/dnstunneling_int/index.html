@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - vrikodar</title>
+    <style>
+        body {
+            background-color: #222;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        p {
+            color: #00ff00;
+        }
+
+        .p-detail p {
+            color: #7f8c8d; 
+        }
+        .p-detail ul {
+            color: #7f8c8d; 
+        }
+
+        img {
+            border: 1.5px solid #00ff00;
+            border-radius: 4px;
+            padding: 5px;
+            width: 950px;
+            height: auto;
+        }
+        .container {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+        }
+
+        .nav {
+            width: 50px;
+            background-color: #333;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .nav a {
+            display: block;
+            color: #00ff00;
+            text-decoration: none;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .date-time {
+            color: #00ff00;
+            font-size: 20px;
+            margin-right: 20px;
+            margin-top: 20px;
+            flex: 1;
+            text-align: right;
+        }
+
+        /* Title box */
+        .title-box {
+            background-color: black;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .gray-text {
+            color: #7f8c8d; /* Calming gray color */
+        }
+
+        /* Terminal-style black box */
+        .terminal-box {
+            background-color: black;
+            color: #7f8c8d; /* Gray text color */
+            padding: 20px;
+            white-space: pre-line;
+            font-family: 'Hack', monospace; /* Use 'Hack' font */
+            font-size: 13px; /* Font size for terminal box text */
+            height: 200px; /* Fixed height for the terminal box */
+            overflow-y: auto; /* Add scroll if content exceeds height */
+            border-radius: 1%;
+            border: 0.5px solid #00ff00;
+        }
+
+        /* About page specific styles */
+        .about-title {
+            font-size: 24px;
+            font-weight: bolder;
+            color: #7f8c8d;
+            text-align: left;
+            margin-bottom: 10px; /* Add margin to separate from image */
+        }
+
+        .profile-image-container {
+            text-align: center;
+        }
+
+        .profile-image {
+            border-radius: 15%;
+            max-width: 200px; /* Adjust image size as needed */
+            display: inline-block;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav">
+            <a href="https://vrikodar.github.io/about.html">About</a>
+            <a href="https://vrikodar.github.io/index.html">Home</a>
+            <a href="https://vrikodar.github.io/explore.html">Explore</a>
+            <a href="https://vrikodar.github.io/projects.html">Projects</a>
+        </div>
+        <div class="content">
+            <div class="about-title">|| Bypass Network Restrictions with DNS Tunneling ||</div>
+            <br>
+            <p><b>Before we jump into configuring DNS tunnels, What is DNS tunneling? When and Why do we need it?</b></p>
+            <div class="p-detail">
+            <p><b>In most of the modern networks it is very less likely that DNS traffic is ever going to to be blocked by the firewalls.<br> DNS traffic could be filtered to only specific domains or only high reputed domains in few cases. <br>Most of the times DNS requests to all the domains are allowed by firewalls</b></p>
+            <p><b>There could be multiple possible cases where DNS tunneling proves to be useful.<br>A very common example is a Command and Control Server using DNS tunnel as a communication channel.<p>
+            <p><b>In DNS tunneling the normal network traffic or packets are encapsulated as DNS traffic.<br>These packets are then exfiltrated using DNS queries. This could be done in a number of ways using DNS.<br>In this article We will not dive deep into how that works.<p></div>
+            <p><b>Example: How would a typical DNS tunnel work as a C2 channel?</b></p>
+            <img src="https://raw.githubusercontent.com/vrikodar/vrikodar.github.io/main/explore/dnstunneling_int/images/dns_int.png">
+            <div class="p-detail">
+            <p><b>There are multiple open source tools that can be used to do DNS tunneling.<br> Most of these tools focus on creating DNS tunnels to access internet via DNS,<br>which can prove to be useful in bypassing captive portals<p>
+            <p><b>We are going to focus on using DNS tunnels to access internet. This can be useful to bypass captive portals.<br>which very often require users to authenticate to access internet.<br>Most captive portals will by default allow users to make DNS requests without being authenticated to the portal.<br>we are going to use a very well known tool <a href="https://code.kryo.se/iodine/">iodine</a> for creating DNS tunnels.<p>
+            <p>Iodine comes with both client and server.<br>The server can be invoked using the command iodined and the client with the command iodine</p></div>
+            <p>Before we proceed further you need to have a machine with public IP on the internet (For Iodine Server).</p><div class="p-detail"><p>You might host a VM on Azure or AWS<br>Make sure that there are no firewall rules blocking incoming traffic to the machine.<br>Iodine should be installed on the machine and SSH should be running.</p>
+            </div>
+            <p><b>Steps to Create a DNS tunnel using Iodine</b></p>
+            <div class="p-detail">
+            <p>Step-1: Buy a Domain from service of your choice (NameCheap, GoDaddy etc..)</p>
+            <p>Lets assume we bought a domain veer.org<br>Access the Domain configuration panel</p>
+            <p>Step-2: Configure appropriate DNS records for the domain as highlighted below.</p>
+            </div>
+            <div class="terminal-box" id="terminal">
+                <span class="gray-text">
+                    Since the domain we have is "veer.org", we are going to create following DNS records
+                    
+                    1.) A record xyz.veer.org ---> Point to ---> (Public IP of machine Going to Act as Server)
+
+                    Note that you can have anything in place of xyz.
+                    make sure the A record points to public IP of machine you hosted on internet. 
+
+                    2.) NS record v.veer.org ---> Point to --> xyz.veer.org
+
+                    Note you have it as anything else instead of "v".
+                    Make sure the NS record is pointed to the domain name configured in previous step.
+                </span>
+            </div>
+            <div class="p-detail">
+                <p>The records might take some time to propogate depending on the DNS servers.</p>
+                <p>Step-3: Run Iodine Server.</p>
+            </div>
+            <div class="terminal-box" id="terminal">
+                <span class="gray-text">
+                    Following command needs to be run on the Server Machine.
+
+                    shell> iodined -c -f 10.0.0.1 -P veer99! v.veer.org
+
+                    -c: Disables Checking Client IP for incoming requests.
+                    -f: Keeps running in foreground.
+                    -P: password to authenticated to server (veer99! in our case).
+
+                    10.0.0.1: is the IP assigned to DNS tunnel interface
+                    
+                    Note that this password is not for encryption of traffic.
+                    Iodine does not encrypt the traffic you sent in DNS tunnel.
+                    Later we will route everything inside the DNS tunnel via SSH tunnels to add secure layer of encryption.
+                </span>
+            </div>
+            <div class="p-detail">
+                <p>Once the Server is Running on the machine it will create a DNS tunnel interface.<br>
+                The DNS tunnel interface is assigned the specified IP 10.0.0.1.<br>This will be the IP we will interact with to send traffic to server machine inside the tunnel.</p>
+                <p>Step-4: Connect to Iodine Server From Iodine Client.</p>
+                <p>Now we will connect to the server from client machine to establish the tunnel.</p>
+            </div>
+            <div class="terminal-box" id="terminal">
+                <span class="gray-text">
+                    Following command needs to be run on the client Machine.
+
+                    shell> iodine -I 50 -f -P veer99! v.veer.org
+
+                    -I: specify max interval between requests (pings).
+                    -f: Keeps running in foreground.
+                    -P: password to authenticated to server (veer99! in our case).
+
+                    This would created a DNS tunnel interface most likely with name dns0 on the machine.
+                </span>
+            </div>
+            <div class="p-detail">
+                <p>We can Directly route all internet traffuc through the DNS tunnel as follows.<br>
+            </div>
+            <div class="terminal-box" id="terminal">
+                <span class="gray-text">
+                    we can add the DNS tunnel interface as default gateway and directly access internet via this DNS tunnel.
+                    Always note the IP assigned to this DNS interface (dns0 here), could be 10.0.0.2
+
+                    shell> route add -net 0.0.0.0/0 gw 10.0.0.2 dns0
+
+                    This will route all internet traffic of the machine via the DNS tunnel.
+                    Note: This traffic would not be encrypted and can be read in clear text by anyone intercepting the traffic.
+                </span>
+            </div>
+            <div class="p-detail">
+                <p>Step-4: Create Secure SOCKS5 proxy via DNS tunnel.</p>
+                <p>SSH is running on all interface on the Iodine server machine.<br>It should also be accessible on <a href="10.0.0.1">10.0.0.1</a> which is IP of machine in DNS tunnel.<br>we are going to setup a Dynamic Proxy using SSH with following Command.</p>
+            </div>
+            <div class="terminal-box" id="terminal">
+                <span class="gray-text">
+                    Creating a Dynamic SOCKS5 Proxy using SSH
+
+                    shell> ssh -D 127.0.0.1:8080 user@10.0.0.1
+
+                    -D: Dynamic Tunnel
+
+                    The SOCKS5 proxy is going to run on port 8080 on localhost on client machine
+                    Note that the user here is a user on the server machine.
+                    10.0.0.1 is IP of DNS interface on the Iodine server machine.
+                </span>
+            </div>
+            <div class="p-detail">
+                <p>Step-5: Access Internet via the SOCKS5 proxy.</p>
+                <p>The SOCKS5 proxy is running on 127.0.0.1:8080 on client machine.<br>we can use it with programs such as proxychains also.<br>We can configure it in browser with programs such as <a href="https://addons.mozilla.org/en-US/firefox/addon/foxyproxy-standard/">FoxyProxy</a> extension</p>
+            </div>
+            <div class="terminal-box" id="terminal">
+                <span class="gray-text">
+                    In FoxyProxy Extension (Available for all modern browsers)
+
+                    Click on Extension --> Go to Options
+                    Add Proxy
+
+                    Proxy Type: SOCKS5
+                    Proxy IP or DNS name: 127.0.0.1
+                    Port: 8080
+
+                    Leave username and password blank
+                    -> save and select the proxy from proxy extension widget
+                </span>
+            </div>
+            <div class="p-detail">
+                <p>Now you should be able to access internet via Encrypted SSH tunnel running inside the DNS tunnel.</p>
+            </div>
+            <p><b>How to Detect DNS Tunneling?</b></p>
+            <div class="p-detail">
+                <p>Attackers can choose to use custom written tools to do DNS tunneling<br>The tools might behave differently making it more difficult to detect.<br>The most common tools such as DNSCat and Iodine can be detected by looking for certain type of patterns in DNS traffic.</p>
+                <ul>
+                    <li>Requests being made to non-human readable subdomains.</li>
+                    <li>Large cluster of DNS requests being sent continuously.</li>
+                    <li>IDS and IPS systems such as Suricata and Snort can also be configured to detect DNS tunneling.</li>
+                </ul>
+            </div>
+            <center><p><b>© 2023 <a href="https://github.com/vrikodar">Vrikodar</a></b></p></center>
+        </div>
+        <div class="date-time" id="date-time"></div>
+    </div>
+</body>
+</html>
