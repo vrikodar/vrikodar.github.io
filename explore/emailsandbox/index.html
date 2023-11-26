@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bypassing Sandboxes For Email Delivery</title>
+    <style>
+        body {
+            background-color: #222;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        p {
+            color: #00ff00;
+        }
+
+        .p-detail p {
+            color: #7f8c8d; 
+        }
+        .p-detail ul {
+            color: #7f8c8d; 
+        }
+
+        .image1 img {
+            border: 1.5px solid #00ff00;
+            border-radius: 4px;
+            padding: 5px;
+            width: 1000px;
+            height: auto;
+        }
+
+        .image2 img {
+            border: 1.5px solid #00ff00;
+            border-radius: 4px;
+            padding: 5px;
+            width: 650px;
+            height: auto;
+        }
+
+        .image3 img {
+            border: 1.5px solid #00ff00;
+            border-radius: 4px;
+            padding: 5px;
+            width: 80%;
+            height: auto;
+        }
+
+        .image4 img {
+            border: 0.5px solid #00ff00;
+            border-radius: 4px;
+            padding: 5px;
+            width: 100%;
+            height: auto;
+        }
+
+        .image5 img {
+            border: 0.5px solid #00ff00;
+            border-radius: 4px;
+            padding: 5px;
+            width: 100%;
+            height: auto;
+        }
+
+        .image6 img {
+            border: 0.5px solid #00ff00;
+            border-radius: 4px;
+            padding: 5px;
+            width: 850px;
+            height: auto;
+        }
+        .image7 img {
+            padding: 5px;
+            width: 950px;
+            height: auto;
+        }
+        .container {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+        }
+
+        .nav {
+            width: 50px;
+            background-color: #333;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .nav a {
+            display: block;
+            color: #00ff00;
+            text-decoration: none;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .date-time {
+            color: #00ff00;
+            font-size: 20px;
+            margin-right: 20px;
+            margin-top: 20px;
+            flex: 1;
+            text-align: right;
+        }
+
+        /* Title box */
+        .title-box {
+            background-color: black;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .gray-text {
+            color: #7f8c8d; /* Calming gray color */
+        }
+
+        /* Terminal-style black box */
+        .terminal-box {
+            background-color: black;
+            color: #7f8c8d; /* Gray text color */
+            padding: 20px;
+            white-space: pre-line;
+            font-family: 'Hack', monospace; /* Use 'Hack' font */
+            font-size: 15px; /* Font size for terminal box text */
+            height: 200px; /* Fixed height for the terminal box */
+            overflow-y: auto; /* Add scroll if content exceeds height */
+            border-radius: 1%;
+            border: 0.5px solid #00ff00;
+        }
+
+        /* About page specific styles */
+        .about-title {
+            font-size: 27px;
+            font-weight: bolder;
+            color: #7f8c8d;
+            text-align: left;
+            margin-bottom: 10px; /* Add margin to separate from image */
+        }
+
+        .profile-image-container {
+            text-align: center;
+        }
+
+        .profile-image {
+            border-radius: 15%;
+            max-width: 200px; /* Adjust image size as needed */
+            display: inline-block;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav">
+            <a href="https://vrikodar.github.io/about.html">About</a>
+            <a href="https://vrikodar.github.io/index.html">Home</a>
+            <a href="https://vrikodar.github.io/explore.html">Explore</a>
+            <a href="https://vrikodar.github.io/projects.html">Projects</a>
+        </div>
+        <div class="content">
+            <div class="about-title">Bypassing Sandbox For Email Delivery</div>
+            <br>
+            <p>What are Email Sandboxes? How are they preventing Modern Day Phishing Attacks?</p>
+            <div class="p-detail">
+            <p>Sandbox is an insolated environment, could be a virtual machine where applications, files etc<br> can be tested or executed to see how it behaves.<br>Generally Phishing Campaigns require users to clicks on links, open attachments etc.<br>This can vary depending on the campaign goals.</p>
+            <p>Most of the email security solutions Such as Proofpoint have sandbox capabilities.<br>Any attachmemts or links present in the email are checked by the sandbox first<br>If found suspicious the emails are put in either quarantine or deleted, depending on how its configured. <p>
+            <p>Each sandbox can be configured differently and hence might behave differently.<br>But generally it has been seen that if you are using a reputed SMTP server to send emails they generally land in inbox.<br>This applies to basic text email messages, because some sandboxes might even not allow harmless HTML embedded emails<br>At the end of the day the configuration of the security solution could be linient or super strict.</div><p>Few Important things to note:</p><div class="p-detail"><p>1.) We are assuming that the sanbox solution used by the target Allows harmless looking emails in text or embedded HTML form which are from normal reputed domains.<br>2.) Most of the standard sandbox  configuration are generally going to allow this.<br>3.) In this current article we are going to focus on sending a masked malicious link which bypasses sandbox<br>4.) The techniques discussed here were custom crafted to bypass ProofPoint sandbox running standard configurations in a test environment.<br>5.) These techniques might not work on other sandbox solutions but can still be helpful in creating bypasses for them.<br>6.) Our goal here is to deliver email to user inbox asking them to click on a link embedded in the email.<br>7.) Bypasses for malicious attachments etc are out of scope in this article.<br></p></div>
+            <p>Phishing Setup Structure:</p>
+            <div class="image1"><img src="https://raw.githubusercontent.com/vrikodar/vrikodar.github.io/main/explore/emailsandbox/images/Email_Sandbox.png"></div>
+            <div class="p-detail">
+            <p>1.) The link sent to the victim user is for the captcha site.<br>2.) Captcha site itself is harmless and does not contain any malicious code.<br>3.) Once user completes the captcha it redirects them to the phishing site harvesting O365 credentials in this case.</p>
+            </div>
+            <p>What Checks would Sandbox Perform on the Captcha Site?</p>
+            <div class="p-detail">
+            <p>1.) In sandbox the general checks such as looking for malicious code.<br>
+            2.) Checking if the link hosts a spoofed or phishing site for a well known site such as office.com.<br>
+            3.) Many more such Basic checks are performed.<br>
+            4.) One of these is to strip all hyperlinks from source code of the site.<br>
+            5.) Any Site Links found from the source are also evaluted by the sandbox.<br>
+            6.) This means the code handeling the redirection after captcha completion can't contain phishing site link in clear text.<br>
+            7.) If sandbox is able to find phishing link from captcha site source the email would be flagged malicious.</p>
+            </div>
+            <p>Captcha site source structure to evade detection from sandbox checks:</p>
+            <div class="p-detail">
+            <p><b>Basic Review:</b></p>
+            <p>1.) The structure of the phishing site is simple.<br>
+            2.) HTML code, CSS code, Javascript Code will each be in seprate files.<br>
+            3.) Javascript code will contain logic for captcha check and redirection.<br>
+            4.) We choose to keep the HTML file simple but it can be customized as required.
+            <p><b>HTML File Structure:</b></p>
+            <p>1.) The HTML is code is simple.<br>
+            2.) The template code renders as follows.<br>
+            3.) The target company logo at top in center.<br>
+            4.) A line below logo instructing user to complete captcha.<br>
+            5.) The captcha itself waiting for completion.<br>
+            6.) A button below which would trigger the redirection.<br>
+            <p><b>Javascript File Structure:</b></p>
+            <p>1.) The Javascript code will implement some encryption.<br>
+            2.) The redirection URL will be present as encrypted AES string inside the JS source.<br>
+            3.) We will use the CryptoJS library to perform encryption and decryption.<br>
+            4.) The key and encrypted string both will be added in JS with base64 encoding.<br>
+            </p>
+            </div>
+            <p>Javascript Code Structure:</p>
+            <div class="image2"><img src="https://raw.githubusercontent.com/vrikodar/vrikodar.github.io/main/explore/emailsandbox/images/JS_struct_overview.png"></div>
+            <br>
+            <p>Javascript Generate Encrypted URL and Key:</p>
+            <div class="p-detail">
+            <p>1.) Using the CryptoJS library loaded from remote cloudfare CDN.<br>
+            2.) We will generate encrypted form of phishing URL and also take note of the key we use.<br>
+            3.) Note that we will have to load the CryptoJS library for this from the cloudfare CDN.<br>
+            4.) Create a simple HTML file with code given below and open it in browser.<br>
+            5.) The raw code in file generate.html can be found <a href="https://github.com/vrikodar/vrikodar.github.io/blob/main/explore/emailsandbox/sample_code/generate.html">here</a>.
+            <p><b>HTML Code to load CryptoJS lib:</b></p>
+            </div>
+            <div class="image3"><img src="https://raw.githubusercontent.com/vrikodar/vrikodar.github.io/main/explore/emailsandbox/images/generation_code_html.png"></div>
+            <div class="p-detail">
+                <p>This will load the CryptoJS library from the cloudfare CDN inside the browser.<br><br>
+                <b>Generating Encrypted Form of URL:</b><br><br>
+                1.) Open Developer javascript console inside the browser with the HTML file opened.<br>
+                2.) Since CryptoJS is loaded, its functions can be directly accessed from console.<br>
+                3.) Run a piece of javascript code from the console directly.<br>
+                4.) The code below will allow you to generate the encrypted form of URL.</p>
+            </div>
+            <div class="terminal-box" id="terminal">
+                <span class="gray-text">
+                    var encrypted = CryptoJS.AES.encrypt("https://vrikodar.org/login", "emailsandbox123!");
+                    console.log(encrypted.toString());
+
+                    // Note that the "emailsandbox123!" is the password we are using for encryption.
+                    // choose a strong password when doing this.
+
+                    // The URL https://vrikodar.org/login is assumed as the phishing URL here.
+                </span>
+            </div>
+            <div class="p-detail">
+                <p>• Once this code is run it will generate the AES encrypted form of URL specified.<br>
+                • Make sure to take a note of the URL<br>• The encrypted URL is generated as shown below.</p>
+            </div>
+            <div class="image4"><img src="https://raw.githubusercontent.com/vrikodar/vrikodar.github.io/main/explore/emailsandbox/images/test_generated.png"></div>
+            <div class="p-detail">
+                <p><b>Base64 Encode the Encrypted URL and Plain Key:</b><br><br>
+                1.) At this point we have AES encrypted URL and plain text key.<br>
+                2.) we will base64 encoded both the Key and the URL.<br>
+                3.) Note that key will only be base64 encoded.<br>
+                4.) The URL on other hand will be AES encrypted and also base64 encoded.</p>
+            </div>
+            <div class="terminal-box" id="terminal">
+                <span class="gray-text">
+                    Following command can be run to base64 encode.
+
+                    shell> echo "key or URL" | base64
+
+                    Run it both on key and URL and take note of output.
+                    In our case the output it following.
+
+                    URL: VTJGc2RHVmtYMTlOd1dkTlo3b3NQM25RbWxMOVZtaGFpY3pKaVBHaU5WNHlxdVRpcHlKL0pqQ3lFVVRJZjFjdQo=
+                    Key: ZW1haWxzYW5kYm94MTIzIQo=
+                </span>
+            </div>
+
+            <div class="p-detail">
+                <p><b>Javascript Code to Perform Decryption and Return URL:</b></p>
+            </div>
+            <div class="terminal-box" id="terminal">
+                <span class="gray-text">
+                    <pre>
+function urlfunc() {
+    let url = 'VTJGc2RHVmtYMTlOd1dkTlo3b3NQM25RbWxMOVZtaGFpY3pKaVBHaU5WNHlxdVRpcHlKL0pqQ3lFVVRJZjFjdQo='; //replace this with URL generated
+    var beurl = url;
+    var beurl2 = CryptoJS.enc.Base64.parse(beurl);
+    var txtbeurl = CryptoJS.enc.Utf8.stringify(beurl2);
+    txtbeurl = txtbeurl.replace(/(\r\n|\n|\r)/gm, "");
+
+    let ky = 'ZW1haWxzYW5kYm94MTIzIQo=' //replace this with key generated
+    var bekey = ky;
+    var bekey2 = CryptoJS.enc.Base64.parse(bekey);
+    var txtbekey = CryptoJS.enc.Utf8.stringify(bekey2);
+    txtbekey = txtbekey.replace(/(\r\n|\n|\r)/gm, "");
+
+    // Code Below would do the decryption
+    var decfin = CryptoJS.AES.decrypt(txtbeurl, txtbekey);
+    finurl = decfin.toString((CryptoJS.enc.Utf8));
+    return finurl;
+}
+                    </pre>
+                </span>
+            </div>
+            <br>
+            <div class="p-detail">
+                <p>To test this code we can again run this from console with same session where we loaded CryptoJS lib.</p>
+            </div>           
+            <div class="image5"><img src="https://raw.githubusercontent.com/vrikodar/vrikodar.github.io/main/explore/emailsandbox/images/jsdecrypt_test.png"></div>
+            <div class="p-detail">
+                <p><b>As expected the decrypted form of URL is returned by function and displayed on console.</b></p>
+            </div>
+            <p>Configuring the Captcha:</p>
+            <div class="p-detail">
+                <p>1.) We are going to use google reCaptcha service, others also might be used.<br>
+                2.) Google reCaptcha requires you to sign up for a google account and then use that to setup the reCaptcha service.<br>
+                3.) You can see <a href="https://www.majesticform.com/form-guides/setup-google-recaptcha">here</a> on setting up account for reCaptcha<br>
+            4.) Once you have the account setup and copied the Site key we can continue programming the rest part of our site.<br>
+            </p>
+            </div>  
+            <div class="p-detail">
+                <p><b>Code to embedd and interact with reCaptcha</b><br>
+                1.) Note that our implementation of captcha is partial here.<br>
+                2.) We prompt user to complete the captcha and then see if it was done.<br>
+            3.) The validity is not checked if captcha was correct or not, this requires additional server side code as well.<br>
+            4.) Our partial implementation will check if user tried solving the captcha and if true it performs the redirection.<br>
+            5.) Sanboxes would not even attempt to complete the captcha and hence this suites our use case.<br><br>
+            </p>
+            </div>  
+            <div class="image6"><img src="https://raw.githubusercontent.com/vrikodar/vrikodar.github.io/main/explore/emailsandbox/images/code_captcha_embedd.png"></div>
+            <div class="p-detail">
+                <p>
+                1.) This code added with the basic HTML template we crafted earlier will give us the final page.<br>
+                2.) The javascript code with urlfunc() function which decrypts and returns the actual phishing URL needs to be another index.js file.<br>
+            3.) You can also add the check function on top inside the index.js file just in case.<br>
+            4.) Its good to have it in two places.
+            </p>
+            </div> 
+            <p>Below is a sample image of rendered Captcha</p>
+            <div class="image7"><img src="https://raw.githubusercontent.com/vrikodar/vrikodar.github.io/main/explore/emailsandbox/images/captcha_final.png"></div>
+            <center><p><b>© 2023 <a href="https://github.com/vrikodar">Vrikodar</a></b></p></center>
+        </div>
+        <div class="date-time" id="date-time"></div>
+    </div>
+</body>
+</html>
