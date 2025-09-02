@@ -1,1 +1,186 @@
-<to be added>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bypassing AppLocker policies for PowerShell on Windows</title>
+    <style>
+        body {
+            background-color: #222;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        p {
+            color: #00ff00;
+        }
+
+        .p-detail p {
+            color: #7f8c8d; 
+        }
+        .p-detail ul {
+            color: #7f8c8d; 
+        }
+
+        .image1 img {
+            border: 1.5px solid #00ff00;
+            border-radius: 4px;
+            padding: 5px;
+            width: 950px;
+            height: auto;
+        }
+
+        .image3 img {
+            border: 1.5px solid #00ff00;
+            border-radius: 4px;
+            padding: 5px;
+            width: 80%;
+            height: auto;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+        }
+
+        .nav {
+            width: 50px;
+            background-color: #333;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .nav a {
+            display: block;
+            color: #00ff00;
+            text-decoration: none;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .date-time {
+            color: #00ff00;
+            font-size: 20px;
+            margin-right: 20px;
+            margin-top: 20px;
+            flex: 1;
+            text-align: right;
+        }
+
+        /* Title box */
+        .title-box {
+            background-color: black;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .gray-text {
+            color: #7f8c8d; /* Calming gray color */
+        }
+
+        /* Terminal-style black box */
+        .terminal-box {
+            background-color: black;
+            color: #7f8c8d; /* Gray text color */
+            padding: 20px;
+            white-space: pre-line;
+            font-family: 'Hack', monospace; /* Use 'Hack' font */
+            font-size: 15px; /* Font size for terminal box text */
+            height: 200px; /* Fixed height for the terminal box */
+            overflow-y: auto; /* Add scroll if content exceeds height */
+            border-radius: 1%;
+            border: 0.5px solid #00ff00;
+        }
+
+        /* About page specific styles */
+        .about-title {
+            font-size: 27px;
+            font-weight: bolder;
+            color: #7f8c8d;
+            text-align: left;
+            margin-bottom: 10px; /* Add margin to separate from image */
+        }
+
+        .profile-image-container {
+            text-align: center;
+        }
+
+        .profile-image {
+            border-radius: 15%;
+            max-width: 200px; /* Adjust image size as needed */
+            display: inline-block;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav">
+            <a href="https://vrikodar.github.io/about.html">About</a>
+            <a href="https://vrikodar.github.io/index.html">Home</a>
+            <a href="https://vrikodar.github.io/explore.html">Explore</a>
+            <a href="https://vrikodar.github.io/projects.html">Projects</a>
+        </div>
+        <div class="content">
+            <div class="about-title">Bypassing AppLocker policies for PowerShell on Windows</div>
+            <br>
+            <p>What are AppLocker Policies on Windows?</p>
+            <div class="p-detail">
+            <p>Following the Microsoft's Definition:"AppLocker helps you control which apps and files users can run. These include executable files, scripts, Windows Installer files, dynamic-link libraries (DLLs), packaged apps, and packaged app installers"<br><p>So AppLocker on windows should basically give admins granular control over what programs can be run on the system. (In this writeup we are only going to talk about one of the scenarios where AppLocker policies are configured to block PowerShell by preventing the execution of "powershell.exe")</p></div>
+            <p>AppLocker Policy Blocking PowerShell:</p>
+            <div class="p-detail">
+            <p>1.) AppLocker Policies can be configured to block execution of programs such as Command Prompt (cmd.exe) and PowerShell (powershell.exe) to prevent users from having command shell access on the system.<br>2.) Most AppLocker policies configured for Blocking powershell block the execution of "powershell.exe".<br>3.) Blocking just powershell.exe via AppLocker policies will not prevent users from executing system commands via PowerShell.</p>
+            </div>
+            <p>What is powershell.exe?</p>
+            <div class="p-detail">
+            <p>1.) powershell.exe itself loads and uses "System.Management.Automation.dll" to interpret and execute PowerShell commands and scripts.<br>
+            2.) powershell.exe is just the host, at its core it uses the ".NET" assembly "System.Management.Automation.dll".<br>
+            3.) This means even if powershell.exe is blocked, if we can interact with "System.Management.Automation.dll", we can execute powershell commands.<br>
+            4.) we will assume here that the AppLocker policies have been configured in a way that allow execution of custom compiled EXEs from some directory paths.<br>
+            5.) Usually these are paths like "C:\Users\Public".<br>
+            </div>
+            <p>How can we abuse this?:</p>
+            <div class="p-detail">
+            <p><b>Custom C# Program to interact with "System.Management.Automation.dll":</b></p>
+            <p>1.) We can write a custom C# program.<br>
+            2.) That will directly use "System.Management.Automation.dll" to execute PowerShell commands.<br>
+            <p> 3.) A simple C# program to achieve this is given below (raw code: <a href="">here</a>):
+            </p>
+            <div class="image1"><img src="https://raw.githubusercontent.com/vrikodar/vrikodar.github.io/refs/heads/main/explore/psapplocker/code.png"></div>
+            </div>
+            <p>Compiling the C# code:</p>
+            <div class="p-detail">
+                <p>#) Make sure that .NET SDK is installed on the system (<a href="https://dotnet.microsoft.com/download">https://dotnet.microsoft.com/download</a>), compilation can be done using the commands below:</p>
+            </div>
+            <div class="terminal-box" id="terminal">
+                <span class="gray-text">
+                    dotnet new console -n Powerapp 
+                    # This will create new project and its directory
+
+                    cd Powerapp 
+                    # switch to the project directory
+
+                    notepad.exe Program.cs 
+                    # Replace the code inside this file with our C# code
+
+                    dotnet publish -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true /p:IncludeAllContentForSelfExtract=true /p:PublishTrimmed=false
+                    # Compile the C# code into a single EXE file
+                    # The EXE file can be found in .\bin\Release\netX.0\win-x64\publish\ directory
+                </span>  
+            </div>
+            <p>The standalone EXE can now be transferred and executed on systems to execute PowerShell commands, even when PowerShell.exe is blocked for execution (Example Below).</p>
+            <div class="image3"><img src="https://raw.githubusercontent.com/vrikodar/vrikodar.github.io/refs/heads/main/explore/psapplocker/executed.png"></div>
+            <center><p><b>© 2025 <a href="https://github.com/vrikodar">Vrikodar</a></b></p></center>
+        </div>
+        <div class="date-time" id="date-time"></div>
+    </div>
+</body>
+</html>
