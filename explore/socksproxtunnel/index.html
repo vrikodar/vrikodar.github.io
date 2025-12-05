@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pairing up a Custom SOCKS Proxy and SSH Tunnel For Traffic Redirection</title>
+    <style>
+        body {
+            background-color: #222;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        p {
+            color: #00ff00;
+        }
+
+        a {
+          color: #7f8c8d;
+          text-decoration: underline; /* optional */
+        }
+
+        a:hover {
+          color: #7f8c8d;
+        }
+
+        a:visited {
+          color: #7f8c8d;
+        }
+
+        a:active {
+          color: #7f8c8d;
+        }
+
+        .p-detail p {
+            color: #7f8c8d; 
+        }
+        .p-detail ul {
+            color: #7f8c8d; 
+        }
+
+        .image1 img {
+            border: 1.5px solid #00ff00;
+            border-radius: 4px;
+            padding: 5px;
+            width: 1400px;
+            height: auto;
+            background-color: #36454F;
+        }
+
+        .image3 img {
+            border: 1.5px solid #00ff00;
+            border-radius: 4px;
+            padding: 5px;
+            width: 50%;
+            height: auto;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+        }
+
+        .nav {
+            width: 50px;
+            background-color: #333;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .nav a {
+            display: block;
+            color: #00ff00;
+            text-decoration: none;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .date-time {
+            color: #00ff00;
+            font-size: 20px;
+            margin-right: 20px;
+            margin-top: 20px;
+            flex: 1;
+            text-align: right;
+        }
+
+        /* Title box */
+        .title-box {
+            background-color: black;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .gray-text {
+            color: #7f8c8d; /* Calming gray color */
+        }
+
+        /* Terminal-style black box */
+        .terminal-box {
+            background-color: black;
+            color: #7f8c8d; /* Gray text color */
+            padding: 20px;
+            white-space: pre-line;
+            font-family: 'Hack', monospace; /* Use 'Hack' font */
+            font-size: 15px; /* Font size for terminal box text */
+            height: 200px; /* Fixed height for the terminal box */
+            overflow-y: auto; /* Add scroll if content exceeds height */
+            border-radius: 1%;
+            border: 0.5px solid #00ff00;
+        }
+
+        /* About page specific styles */
+        .about-title {
+            font-size: 27px;
+            font-weight: bolder;
+            color: #7f8c8d;
+            text-align: left;
+            margin-bottom: 10px; /* Add margin to separate from image */
+        }
+
+        .profile-image-container {
+            text-align: center;
+        }
+
+        .profile-image {
+            border-radius: 15%;
+            max-width: 200px; /* Adjust image size as needed */
+            display: inline-block;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav">
+            <a href="https://vrikodar.github.io/about.html">About</a>
+            <a href="https://vrikodar.github.io/index.html">Home</a>
+            <a href="https://vrikodar.github.io/explore.html">Explore</a>
+            <a href="https://vrikodar.github.io/projects.html">Projects</a>
+        </div>
+        <div class="content">
+            <div class="about-title">Pairing up a Custom SOCKS Proxy and SSH Tunnel For Traffic Redirection</div>
+            <br>
+            <p><b>Why would you want a SOCKS proxy <----> SSH tunnel for traffic redirection?</b></p>
+            <div class="p-detail">
+            <p>Let's say on an internal AD pentest you have been given access to a foothold domain joined machine with normal user access.<br><p>The endpoint security on the foothold machine is strong and effective.<br>You can't use initial access payloads (e.g. cobalt strike or any other C2 payloads) to gain a reverse shell that would allow you to use C2 framework of some kind (which would usually have built in capabilities to deploy proxy servers and perform tunneling)</p><p>In cases like this to save time and effort (that might be spent bypassing endpoint security) we can totally avoid executing any payloads on the host machine (Completely avoiding the endpoint security solution).<br>hypothetically speaking, what if we can find a way to directly interact with the internal network that we are testing from another machine (e.g. Azure VM) which is entirely controlled by us.<br>Since we would have full control over the machine, we can install any tools and directly use them from the machine without having to worry about endpoint security.<br><br>Now one might argue that in that case why don't we just plug in our custom test machine directly to the internal network via ethernet?<br>Well in that case what if there is robust NAC (Network Access Control) that prevents you from accessing the network directly via ethernet, the plan fails<br>In such case it would be super helpful if we can just use the foothold machine as a traffic relay between our own test machine and the internal network<br><br>Note that you don't have local admin access to the foothold machine so there isn't much you can do there.<br><br>In this article we will look at how we can use a simple SOCKS proxy (written in python) and a reverse SSH tunnel to effectively allow a remote machine controlled by us to interact with machines inside an internal network (connected to the foothold machine)</p></div>
+            <p><b>Few things to note before we go further:</b></p>
+            <div class="p-detail">
+            <p>1.) We are going to utilize SSH client (from windows) to create a reverse SSH tunnel.<br>2.) We configure our remote server to run SSH on port 443, this increases the chances of outgoing SSH connections being successful and allowed by firewall.<br>3.) We also assume that we have access to clear text user credentials for our foothold or any other AD user.</p>
+            </div>
+            <p><b>Diagram Illustration of the Traffic Flow in this setup:</b></p>
+            <div class="image1"><img src="https://raw.githubusercontent.com/vrikodar/vrikodar.github.io/refs/heads/main/explore/socksproxtunnel/images/diagram_socks_ssh.png"></div>
+            <p><b>Hosting the SOCKS Proxy Server:</b></p>
+            <div class="p-detail">
+            <p><b>Simple Python Code to host a SOCKS proxy server is given below:</b></p>
+            <p>1.) Python can be installed on a <a href="https://www.python.org/downloads/windows/">windows</a> system without needing admin privileges (You can also compile the python file to EXE on another machine and then use the standlone EXE).<br>
+            2.) The SOCKS5 proxy server we have here is very minimal and as of nows works well with simple tools like proxychains.<br>
+            3.) The implementation can be extended or reimplemented entirely (raw code: <a href="https://raw.githubusercontent.com/vrikodar/vrikodar.github.io/refs/heads/main/explore/socksproxtunnel/socks_server.py">here</a>):
+            </p>
+            </div>
+            <p>SOCKS5 server proxy code (change port by editing LISTEN_PORT):</p>
+            <div class="terminal-box" id="terminal">
+                <span class="gray-text">
+                    import socket
+                    import threading
+
+                    LISTEN_PORT = 1080   # Change this to whatever port you want
+
+
+                    def handle_client(client_socket):
+                        try:
+                            client_socket.recv(2)
+                            client_socket.recv(1)  
+                            
+                            client_socket.sendall(b"\x05\x00")
+
+                            version, cmd, _, address_type = client_socket.recv(4)
+
+                            if address_type == 1:  
+                                address = socket.inet_ntoa(client_socket.recv(4))
+                            else:
+                                client_socket.close()
+                                return
+                            
+                            port = int.from_bytes(client_socket.recv(2), 'big')
+
+                            remote = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                            remote.connect((address, port))
+
+                            reply = b"\x05\x00\x00\x01" + socket.inet_aton("0.0.0.0") + (0).to_bytes(2, 'big')
+                            client_socket.sendall(reply)
+
+                            def relay(src, dst):
+                                while True:
+                                    data = src.recv(4096)
+                                    if not data:
+                                        break
+                                    dst.sendall(data)
+                                src.close()
+                                dst.close()
+
+                            threading.Thread(target=relay, args=(client_socket, remote)).start()
+                            threading.Thread(target=relay, args=(remote, client_socket)).start()
+
+                        except Exception as e:
+                            client_socket.close()
+
+
+                    def start_socks5_server(port):
+                        print(f"[+] SOCKS5 proxy listening on port {port}")
+                        server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                        server.bind(("0.0.0.0", port))
+                        server.listen(5)
+
+                        while True:
+                            client_socket, _ = server.accept()
+                            threading.Thread(target=handle_client, args=(client_socket,)).start()
+
+
+                    if __name__ == "__main__":
+                        start_socks5_server(LISTEN_PORT)
+                </span>  
+            </div>
+            <p>The code can be saved to a file and then executed to start a SOCKS5 proxy server listener.</p>
+            <div class="image3"><img src="https://raw.githubusercontent.com/vrikodar/vrikodar.github.io/refs/heads/main/explore/socksproxtunnel/images/socks_listen.png"></div>
+            <p><b>Creating the Reverse SSH Tunnel:</b></p>
+            <div class="p-detail">
+            <p>1.) Our SSH server has been configured to run on port 443. (can be configured by editing the SSH configuration files)<br>
+            2.) The public key of user where we are hosting the SOCKS server is added to authorized keys on the cloud machine SSH server.
+            <br>3.) The password authentication can be disabled on the SSH server (not discussed here) and only key based authentication be utilized for access, for added security. 
+            <br>4.) Various Techniques can be used to transfer the public key (not discussed here) and added to the authorized keys list<br>5.) Once the key is added and 443 is allowed for incoming connections on our cloud machine, we can go ahead and create the reverse SSH tunnel</p></div>
+            <div class="image3"><img src="https://raw.githubusercontent.com/vrikodar/vrikodar.github.io/refs/heads/main/explore/socksproxtunnel/images/reverse_tunnel.png"></div>
+            <div class="p-detail">
+            <p>1.) Once the tunnel is created we will see the reverse tunnel port listening on our target cloud machine.<br>
+            2.) This listening port (127.0.0.1:1080 in our case) can be added to the proxychains configuration file /etc/proxychains/proxychains.conf (file names could be different for your system depending on version of proxychains)<br>
+            3.) Once the tunnel is in place and SOCKS server is running, from the cloud machine traffic can be sent to an internal machine routing through the reverse SSH tunnel and SOCKS proxy.<br>
+            4.) The image below shows a test case of sending a HTTP GET request to an internal HTTP server from the cloud machine via the reverse SSH tunnel and SOCKS proxy 
+            </div>
+            <div class="image3"><img src="https://raw.githubusercontent.com/vrikodar/vrikodar.github.io/refs/heads/main/explore/socksproxtunnel/images/proxy_request_socks.png"></div>
+            <center><p><b>© 2025 <a href="https://github.com/vrikodar">Vrikodar</a></b></p></center>
+        </div>
+        <div class="date-time" id="date-time"></div>
+    </div>
+</body>
+</html>
